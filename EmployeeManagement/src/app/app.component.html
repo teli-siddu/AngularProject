@@ -1,0 +1,30 @@
+
+
+<div class="grid-container {{width}}">
+    <div class="top-row pl-2 navbar navbar-dark">
+    
+        <button class="navabar-width-adj btn" type="button" (click)="ToggleWidthClick()">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <button class="navbar-toggler" type="button"  (click)="ToggleNavMenuClick()">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <div class="sidebar-wrapper {{navMenucssClass}}">
+        
+        <app-side-nav-menu></app-side-nav-menu>
+    </div>
+    <div class="top-nav-bar  top-row px-4 header" style="z-index:1">
+        <app-nav-menu></app-nav-menu>
+    </div>
+    <div class="main">
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+    
+        
+    </div>
+    <div class="footer">
+        <app-footer></app-footer>
+    </div>
+</div>

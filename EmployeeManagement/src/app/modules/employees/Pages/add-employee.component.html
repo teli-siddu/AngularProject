@@ -1,0 +1,331 @@
+<!-- Value: {{EmployeeFormGroup.value | json}}
+<br />
+status:{{EmployeeFormGroup.status}} -->
+
+<div class="add-employee-container">
+    <form [formGroup]="EmployeeFormGroup" (ngSubmit)="saveEmployee(EmployeeFormGroup.value)">
+
+
+        <input type="hidden" formControlName="Id" value="0">
+        <div class="card ">
+            <div class="card-header text-white" style="background-color:#3075ba ;">
+                Roles Details
+            </div>
+            <div class="card-body d-flex">
+
+                <div formArrayName="Roles" class="col-md-3" *ngFor="let Role of roles.controls;let i=index">
+
+                    <div formGroupName="{{i}}">
+                        <!-- {{ log(roles1[i])}} -->
+                        <div class="form-group">
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" formControlName="IsSelected" />
+
+                                    {{rolesArray[i].RoleName}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="card  ">
+            <div class="card-header text-white" style="background-color:#3075ba ;">
+                User Details
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">First Name</label>
+                            <input type="text" formControlName="FirstName" placeholder="First Name"
+                                class="form-control" />
+                            <!-- {{log(firstName.errors)}} -->
+                            <div class="text text-danger"
+                                *ngIf="firstName.invalid  && (firstName.dirty||firstName.touched)">
+                                <div *ngIf="firstName.errors.required">First Name is required</div>
+                                <div *ngIf="firstName.errors.minlength">First Name length should be at least 4
+                                    characters
+                                </div>
+                            </div>
+
+                            <!-- {{log(firstName)}} -->
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">Last Name</label>
+                            <input type="text" formControlName="LastName" placeholder="Last Name"
+                                class="form-control" />
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">User Name</label>
+                            <input type="text" formControlName="UserName" placeholder="User Name"
+                                class="form-control" />
+                            <div class="text text-danger"
+                                *ngIf="userName.invalid  && (userName.dirty||userName.touched)">
+                                <div *ngIf="userName.errors.required">User Name is required</div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">Password</label>
+                            <input type="password" formControlName="Password" placeholder="Password"
+                                class="form-control" />
+                            <div class="text text-danger"
+                                *ngIf="password.invalid  && (password.dirty||password.touched)">
+                                <div *ngIf="password.errors.required">Password is required</div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">Confirm Password</label>
+                            <input type="password" formControlName="ConfirmPassword" placeholder="Confirm Password"
+                                class="form-control" />
+                            <div class="text text-danger"
+                                *ngIf="confirmPassword.invalid  && (confirmPassword.dirty||confirmPassword.touched)">
+                                <div *ngIf="confirmPassword.errors.required">Confirm Password is required</div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">Date of Birth</label>
+                            <input type="text" formControlName="DateOfBirth" bsDatepicker [bsConfig]="bsConfig"
+                                placeholder="Date of Birth" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">Select Gender</label>
+                            <select formControlName="GenderId" class="form-control">
+                                <option selected [value]="0">Select Gender</option>
+                                <option *ngFor="let gender of genders" [value]="gender.Key">{{gender.Value}}
+                                </option>
+                                <!-- <option value="0">Select Gender</option>
+                                <option value="1">Male </option>
+                                <option value="2">Female </option> -->
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">Select Maritial Status</label>
+                            <select formControlName="MaritialStatusId" class="form-control">
+                                <option selected [value]="0">Select Maritial Status</option>
+                                <option *ngFor="let maritialStatus of maritialStatuses" [value]="maritialStatus.Key">
+                                    {{maritialStatus.Value}}</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">Select Nationality</label>
+                            <select formControlName="NationalityId" class="form-control">
+                                <option selected [value]="0">Select Country</option>
+                                <option *ngFor="let nationality of nationalities" [value]="nationality.Key">
+                                    {{nationality.Value}}</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">Select Department</label>
+                            <select formControlName="DepartmentId" class="form-control">
+                                <option selected [value]="0">Select Country</option>
+                                <option *ngFor="let department of departments" [value]="department.Key">
+                                    {{department.Value}}</option>
+                            </select>
+
+                        </div>
+                    </div> -->
+
+                    <div formArrayName="Mobiles" class="col-md-3" *ngFor="let Mobile of mobiles.controls;let i=index">
+
+
+                        <div formGroupName={{i}} class="form-group">
+
+                            <label class="control-label">Mobile No. {{i+1}}</label>
+                            <input type="text" class="form-control" formControlName="MobileNumber"
+                                placeholder="Mobile No. {{i+1}}">
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <div formArrayName="Emails" class="col-md-3">
+
+                        <div *ngFor="let Email of emails.controls;let i = index">
+                            <div class="form-group" formGroupName={{i}}>
+
+                                <label class="control-label">Email Id {{i+1}}</label>
+                                <input type="text" class="form-control" formControlName="EmailId"
+                                    placeholder="Email Id {{i+1}}">
+
+                                <div *ngIf="emails.controls[i].get('EmailId').invalid && (emails.controls[i].get('EmailId').dirty || emails.controls[i].get('EmailId').touched )&& emails.controls[i].get('EmailId').errors"
+                                    class="text text-danger">
+                                    Invalid Email Id
+                                </div>
+                                <!-- <div id="Email" ngIf="Email && (emails[i].touched||emails[i].dirty)"
+                                    class="text text-danger"> -->
+                                <!-- <div ngIf="emails[i].errors.EmailId">
+                                        invalid email id
+                                    </div> -->
+                                <!-- </div> -->
+                                <!-- {{log(emails.controls[0].get('EmailId'))}} -->
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="" style="width: 100%" formArrayName="Addresses"
+                        *ngFor="let Address of addresses.controls;let i=index">
+
+                        <div formGroupName="{{i | number}}" style="display: flex;">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Select Country</label>
+
+                                    <select formControlName="CountryMasterId" class="form-control"
+                                        (change)="countryChange(countryRef.value)" #countryRef>
+                                        <option selected [value]=0>Select Country</option>
+                                        <option *ngFor="let country of countries" [value]="country.Key">
+                                            {{country.Value}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label class="control-label">Select State</label>
+                                    <select formControlName="StateMasterId" class="form-control"
+                                        (change)="stateChange(stateRef.value)" #stateRef>
+                                        <option selected [value]="0">Select State</option>
+                                        <option *ngFor="let state of states" [value]="state.Key">{{state.Value}}
+                                        </option>
+
+                                    </select>
+
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+
+                                <div class="form-group">
+                                    <label class="control-label">Select City</label>
+                                    <select formControlName="CityMasterId" class="form-control">
+                                        <option selected value="0">Select City</option>
+                                        <option *ngFor="let city of cities" [value]="city.Key">{{city.Value}}</option>
+
+                                    </select>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+        <div class="card ">
+            <div class="card-header text-white" style="background-color:#3075ba ;">
+                Employment Details
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Employee Id</label>
+                            <input type="text" formControlName="EmployeeId" class="form-control"
+                                placeholder="Employee Id" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Designation</label>
+                            <input type="text" formControlName="Designation" class="form-control"
+                                placeholder="Designation" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Date of joining</label>
+                            <input type="text" formControlName="DateofJoining" bsDatepicker [bsConfig]="bsConfig"
+                                class="form-control" placeholder="Date of joining" />
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <label class="control-label">Select Department</label>
+                            <select formControlName="DepartmentId" class="form-control">
+                                <option selected value="0">Select Department</option>
+                                <option *ngFor="let department of departments" [value]="department.Key">
+                                    {{department.Value}}</option>
+
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="text-align: center;">
+            <div class="col-md-12">
+                <!-- {{log(EmployeeFormGroup.invalid)}} -->
+                <button type="submit" [disabled]="EmployeeFormGroup.invalid" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+
+</div>
