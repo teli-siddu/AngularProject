@@ -6,18 +6,14 @@ import { AppComponent } from './app.component';
 
 import { HelpComponent } from './help/help.component';
 
-import { RouterModule, Routes, ROUTES } from '@angular/router';
+import { RouterModule, Routes, ROUTES, ActivatedRoute } from '@angular/router';
 
 // import { ListEmployeesComponent } from './Modules/employees/Pages/list-employees.component';
 // import { CardComponent } from './shared/components/card.component';
 import { TypeScriptTestComponent } from './type-script-test/type-script-test.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { EmployeesModule } from './modules/employees/employees.module';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+// import { EmployeesModule } from './modules/employees/employees.module';
 import { ListEmployeesComponent } from './modules/employees/Pages/list-employees.component';
-import { NavMenuComponent } from './shared/pages/nav-menu.component';
-import { HeaderComponent } from './shared/pages/header.component';
-import { SideNavMenuComponent } from './shared/pages/side-nav-menu.component';
-import { FooterComponent } from './shared/pages/footer.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DropdownsService } from './shared/services/dropdowns.service';
 import { EmployeesService } from './modules/employees/Services/employees.service';
@@ -25,6 +21,22 @@ import { EmailValidator } from './shared/directives/email-validator.directive';
 // import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { MatProgressBarModule } from '@angular/material/progress-bar'
+
+import { LoginComponent } from './modules/login/login.component';
+import { LoginModule } from './modules/login/login.module';
+import { JwtModule, JwtModuleOptions, JwtHelperService } from '@auth0/angular-jwt'
+import { AuthenticationService } from './services/authentication.service';
+import { JwtIntercepterService } from './intercepters/jwt-intercepter.service';
+import { ErrorIntercepterService } from './intercepters/error-intercepter.service';
+import { AuthGuardService } from './guards/auth-guard.service';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatIconModule, MatMenuModule } from '@angular/material';
+import { SsComponent } from './ss/ss.component';
+import { CoreModule } from './core/core.module';
+import { LoadingScreen } from './models/loading-screen.model';
+
+
 
 
 
@@ -36,6 +48,17 @@ const appRoutes: Routes =
 
     // { path: "", redirectTo:"/employees" ,pathMatch:"full" }
   ]
+export function tokenGetter() {
+  return localStorage.getItem("access_token");
+}
+const tokenConfig: JwtModuleOptions = {
+  config: {
+    tokenGetter: tokenGetter,
+    whitelistedDomains: ['localhost:44320'],
+    blacklistedRoutes: ['http://localhost:3000/auth/login']
+  }
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,10 +66,10 @@ const appRoutes: Routes =
     // CardComponent,
 
     TypeScriptTestComponent,
-    NavMenuComponent,
-    HeaderComponent,
-    SideNavMenuComponent,
-    FooterComponent,
+
+    SsComponent,
+
+
     // FormsModule
 
 
@@ -58,15 +81,30 @@ const appRoutes: Routes =
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule.forRoot(appRoutes),
+    // RouterModule.forRoot(appRoutes),
     HttpClientModule,
-    EmployeesModule,
+    // EmployeesModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     BsDatepickerModule.forRoot(),
-    FormsModule
+    FormsModule,
+    MatProgressBarModule,
+    CoreModule,
+
+    // JwtModule.forRoot(tokenConfig)
+    JwtModule.forRoot(tokenConfig),
+    MatTreeModule,
+    MatIconModule,
+    MatMenuModule
+
   ],
-  providers: [HttpClient, DropdownsService, EmployeesService],
-  bootstrap: [AppComponent]
+  providers: [HttpClient, DropdownsService, EmployeesService, AuthenticationService,
+    // AuthGuardService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtIntercepterService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorIntercepterService, multi: true },
+
+  ],
+  bootstrap: [AppComponent],
+  exports: []
 })
 export class AppModule { }

@@ -1,0 +1,60 @@
+import { Component, OnInit } from '@angular/core';
+import { of, observable, Observable, throwError, from, interval, fromEvent, pipe } from 'rxjs';
+import { map, retry, catchError, filter } from 'rxjs/operators'
+import { EmployeeViewModel } from '../models/employees.model';
+import { async } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
+import { error } from 'protractor';
+import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+
+
+@Component({
+  selector: 'app-type-script-test',
+  templateUrl: './type-script-test.component.html',
+  styleUrls: ['./type-script-test.component.css']
+})
+export class TypeScriptTestComponent implements OnInit {
+
+
+  EmployeeFormGroup:FormGroup=new FormGroup({
+    Name:new FormControl('')
+  });
+  
+
+  constructor()
+  {
+    console.log("in constructor")
+  }
+  ngOnChanges(){
+console.log("ngOnChanges")
+
+}
+
+  ngOnInit(): void {
+    console.log("ngOnChanges")
+}
+ngDoCheck(){
+  console.log("ngDoCheck")
+}
+
+ngAfterContentInit(){
+  console.log("ngAfterContentInit")
+}
+ngAfterContentChecked(){
+  console.log("ngAfterContentChecked")
+}
+ngAfterViewInit(){
+  console.log("ngAfterViewInit")
+}
+
+ngAfterViewChecked(){
+  console.log("ngAfterViewChecked")
+}
+ngOnDestroy(){
+  console.log("ngOnDestroy")
+}
+
+
+
+
+}

@@ -1,28 +1,40 @@
-
-
+<app-loading-screen> </app-loading-screen>
 <div class="grid-container {{width}}">
-    <div class="top-row pl-2 navbar navbar-dark">
-    
-        <button class="navabar-width-adj btn" type="button" (click)="ToggleWidthClick()">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <button class="navbar-toggler" type="button"  (click)="ToggleNavMenuClick()">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-    <div class="sidebar-wrapper {{navMenucssClass}}">
-        
+
+    <!-- <div class="top-row pl-2 navbar navbar-dark">
+
+
+    </div> -->
+    <div class="sidebar-wrapper {{navMenucssClass}}" *ngIf="isAuthenticated$ | async">
+
         <app-side-nav-menu></app-side-nav-menu>
     </div>
-    <div class="top-nav-bar  top-row px-4 header" style="z-index:1">
-        <app-nav-menu></app-nav-menu>
-    </div>
-    <div class="main">
-        <div class="content">
-            <router-outlet></router-outlet>
+    <div class="top-nav-bar navbar  top-row px-4 header" style="z-index:1">
+        <div class="nav-toggler">
+            <button class="navabar-width-adj btn" type="button" (click)="ToggleWidthClick()"
+                *ngIf="isAuthenticated$ | async">
+                <i class="fa fa-bars" style="color:chartreuse; "></i>
+            </button>
+            <button class="navbar-toggler" type="button" (click)="ToggleNavMenuClick()"
+                *ngIf="isAuthenticated$ | async">
+                <i class="fa fa-bars" style="color:chartreuse; "></i>
+            </button>
         </div>
-    
-        
+
+        <app-nav-menu [user]="user " [menuItems]="menuItems"></app-nav-menu>
+    </div>
+
+    <div class="main">
+
+        <div class="content">
+            <app-alert></app-alert>
+
+            <router-outlet></router-outlet>
+
+        </div>
+
+
+
     </div>
     <div class="footer">
         <app-footer></app-footer>
