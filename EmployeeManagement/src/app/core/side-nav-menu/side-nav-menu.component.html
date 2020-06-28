@@ -1,0 +1,139 @@
+<!-- <div class="sidebar {{width}} bg-dark">
+
+
+    <div class="NavMenuCssClass" (onclick)="ToggleNavMenuClick">
+
+     
+
+        <ul>
+            <li *ngFor="let item of menuItems | async  ; let i = index" id="i">
+
+             
+                <div class="d-flex"> <button (click)="toggleLi(i)" class="btn btn-chevron-down"
+                        *ngIf="item.Children.length>0"><i class="fa"
+                            [ngClass]="{'fa-chevron-down':toggle[i],'fa-chevron-right':!toggle[i]}"
+                            aria-hidden="true"></i></button>
+                    <a class="nav-link d-flex" [routerLink]="[item.URL]">
+                        <i class="fa fa-users" aria-hidden="true"></i> <span>{{item.Name}}</span>
+                    </a>
+                </div>
+                <div *ngIf="item.Children.length>0 && toggle[i]">
+                    <ng-container *ngTemplateOutlet="tree; context: { $implicit: item.Children, idx: i }">
+                    </ng-container>
+                </div>
+            </li>
+        </ul>
+
+        <ng-template #tree let-allItems let-idx="idx">
+            <ul>
+                <li *ngFor="let item of allItems; let n = index" id="{{idx+'.'+n}}">
+
+                 
+                    <div class="d-flex"> <button (click)="toggleLi(idx+'.'+n)" class="btn btn-chevron-down"
+                            *ngIf="item.Children.length>0"><i class="fa fa-chevron-down"
+                                [ngClass]="{'fa-chevron-down':toggle[idx+'.'+n],'fa-chevron-right':!toggle[idx+'.'+n]}"
+                                aria-hidden="true"></i></button>
+                        <a class="nav-link d-flex" [routerLink]="[item.URL]">
+                            <i class="fa fa-users" aria-hidden="true"></i> <span>{{item.Name}}</span>
+                        </a>
+                    </div>
+
+                    <div *ngIf="item.Children.length>0 && toggle[idx+'.'+n]">
+                        <ng-container *ngTemplateOutlet="tree; context: { $implicit: item.Children, idx: n }">
+                        </ng-container>
+                    </div>
+                </li>
+            </ul>
+        </ng-template>
+    </div>
+</div> -->
+
+<mat-sidenav-container class="app-container" autosize>
+    <mat-sidenav #sidenav class="app-sidenav" mode="side" opened="true" (mouseenter)="mouseenter()"
+        (mouseleave)="mouseleave()">
+        <mat-nav-list>
+
+            <mat-list-item (click)="showProfile= !showProfile">
+                <!-- <span class="full-width" *ngIf="isExpanded || isShowing">{{menuItem.Name}}</span> -->
+                <div class="profile d-flex full-width" style="text-align: center;">
+                    <div class="profile-image">
+                        <img width="50" [style.borderRadius]="'50%'" src="../assets/adult-1260380_1920.jpg">
+                    </div>
+                    <div class="profile-name" style="padding: 15px;">
+                        <h6>Akash</h6>
+                    </div>
+
+                </div>
+                <mat-icon class="menu-button" [ngClass]="{'rotated' :showProfile}" *ngIf="isExpanded || isShowing">
+                    expand_more</mat-icon>
+            </mat-list-item>
+
+
+
+            <ng-container [ngTemplateOutlet]="recursiveListMenuItems"
+                [ngTemplateOutletContext]="{$implicit: menuItems | async , idx:0}"></ng-container>
+        </mat-nav-list>
+
+    </mat-sidenav>
+</mat-sidenav-container>
+
+
+<ng-template #recursiveListMenuItems let-menuItems let-idx="idx">
+
+    <div *ngFor="let menuItem of menuItems;let i=index">
+        <ng-container [ngTemplateOutlet]="menuItem.Children.length>0? submenuItem : simpleMenuItem"
+            [ngTemplateOutletContext]="{$implicit: menuItem,idx:idx+'.'+i}"></ng-container>
+    </div>
+</ng-template>
+
+<ng-template #simpleMenuItem let-menuItem let-idx="idx">
+    <!-- <button mat-menu-item class="mat-button"><span>{{menuItem.Name}}</span></button> -->
+    <mat-list-item>{{menuItem.Name}}</mat-list-item>
+</ng-template>
+
+<ng-template #submenuItem let-menuItem let-idx="idx">
+
+    <mat-list-item (click)="toggle[idx] = !toggle[idx]" class="parent" [ngClass]="idx">
+        <span class="full-width" *ngIf="isExpanded || isShowing">{{menuItem.Name}}</span>
+        <mat-icon mat-list-icon>home</mat-icon>
+        <mat-icon class="menu-button" [ngClass]="{'rotated' : toggle[idx]}" *ngIf="isExpanded || isShowing">
+            expand_more</mat-icon>
+    </mat-list-item>
+    <div *ngIf="toggle[idx]">
+        <ng-container [ngTemplateOutlet]="recursiveListMenuItems"
+            [ngTemplateOutletContext]="{$implicit: menuItem.Children,idx:idx}">
+        </ng-container>
+    </div>
+
+
+
+
+</ng-template>
+<!-- <mat-sidenav-container class="app-container" autosize>
+    <mat-sidenav #sidenav class="app-sidenav" mode="side" opened="true" (mouseenter)="mouseenter()"
+        (mouseleave)="mouseleave()">
+        <mat-nav-list>
+            <mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
+                <span class="full-width" *ngIf="isExpanded || isShowing">Parent Menu</span>
+                <mat-icon mat-list-icon>home</mat-icon>
+                <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubmenu}" *ngIf="isExpanded || isShowing">
+                    expand_more</mat-icon>
+            </mat-list-item>
+            <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+                <a mat-list-item href="...">Submenu Item 1</a>
+                <a mat-list-item href="...">Submenu Item 2</a>
+                <mat-list-item (click)="showSubSubMenu = !showSubSubMenu" class="parent">
+                    <span class="full-width" *ngIf="isExpanded || isShowing">Nested Menu</span>
+                    <mat-icon class="menu-button" [ngClass]="{'rotated' : showSubSubMenu}"
+                        *ngIf="isExpanded || isShowing">expand_more</mat-icon>
+                </mat-list-item>
+                <div class="submenu" [ngClass]="{'expanded' : showSubSubMenu}" *ngIf="isShowing || isExpanded">
+                    <mat-list-item>SubSubmenu Item 1</mat-list-item>
+                    <mat-list-item>SubSubmenu Item 2</mat-list-item>
+                </div>
+            </div>
+        </mat-nav-list>
+        <mat-nav-list>
+        </mat-nav-list>
+    </mat-sidenav>
+</mat-sidenav-container> -->

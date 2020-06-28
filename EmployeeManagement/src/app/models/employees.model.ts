@@ -1,5 +1,5 @@
 
-export interface EmployeeViewModel{
+export interface EmployeeViewModel {
     Id: number;
     FirstName: string;
     LastName: string;
@@ -16,39 +16,40 @@ export interface EmployeeViewModel{
     PassportNumber: string;
 
     UserName: string;
-    Gender:string;
-    MaritialStatus:string;
-    Mobiles:MobileViewModel[];
-    Emails:EmailViewModel[];
-    Roles:RoleViewModel[];
-    Addresses:AddressViewModel;
+    Gender: string;
+    MaritialStatus: string;
+    Mobiles: MobileViewModel[];
+    Emails: EmailViewModel[];
+    Roles: RoleViewModel[];
+    Addresses: AddressViewModel;
+    ProfilePictureUrl: string;
 }
-export interface EmailViewModel{
-    EmailId:string
+export interface EmailViewModel {
+    EmailId: string
 }
 
-export interface MobileViewModel{
-    MobileNumber:string
+export interface MobileViewModel {
+    MobileNumber: string
 }
 export interface AddAddressViewModel {
     CountryMasterId?: number;
     StateMasterId?: number;
     CityMasterId?: number;
     AddressTypeId?: number;
-    LandMark:number;
+    LandMark: number;
 }
-export interface RoleViewModel{
-    RoleId:number;
-    RoleName:string;
-    IsSelected:boolean;
+export interface RoleViewModel {
+    RoleId: number;
+    RoleName: string;
+    IsSelected: boolean;
 }
-export interface AddressViewModel{
-    CityName:string;
-    StateName:string;
-    CountryName:string;
-    PermnentAddress:boolean;
-    EmployeeId:string;
-    AddressType:string;
+export interface AddressViewModel {
+    CityName: string;
+    StateName: string;
+    CountryName: string;
+    PermnentAddress: boolean;
+    EmployeeId: string;
+    AddressType: string;
 }
 
 
@@ -69,14 +70,14 @@ export interface AddEmployeeViewModel {
     PassportNumber; string;
 
     UserName: string;
-    GenderId?:number;
-    MaritialStatusId?:number;
-    NationalityId?:number;
-    AddressTypeId?:number;
-    DepartmentId:number;
-    Mobiles:string[];
-    Emails:string[];
-    Addresses:AddAddressViewModel[];
-    Roles:RoleViewModel[];
+    GenderId?: number;
+    MaritialStatusId?: number;
+    NationalityId?: number;
+    AddressTypeId?: number;
+    DepartmentId: number;
+    Mobiles: string[];
+    Emails: string[];
+    Addresses: AddAddressViewModel[];
+    Roles: RoleViewModel[];
 }
 

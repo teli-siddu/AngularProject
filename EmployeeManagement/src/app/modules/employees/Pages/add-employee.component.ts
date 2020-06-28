@@ -1,12 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 // import { AddEmployeeViewModel } from 'src/app/models/employees.model';
 import { FormControl, FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { DropdownsService } from 'src/app/shared/services/dropdowns.service';
 import { EmployeesService } from '../Services/employees.service';
 import { EmailValidator } from 'src/app/shared/directives/email-validator.directive';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { error } from 'protractor';
+import { AlertService } from 'src/app/core/alert/alert.service';
+import { LoadingScreenService } from 'src/app/core/loading-screen/loading-screen.service';
+import { Observable } from 'rxjs';
+
 
 
 @Component({
@@ -15,8 +19,12 @@ import { error } from 'protractor';
   styleUrls: ['./add-employee.component.css']
 })
 
-export class AddEmployeeComponent implements OnInit {
+export class AddEmployeeComponent implements OnInit, AfterViewInit {
 
+  @ViewChild("fileInput") fileInput: ElementRef;
+  fileData: File = null;
+  filePath: Observable<string>;
+  previewUrl: any = "../assets/images/placeholder-profile-male.jpg";
   EmployeeFormGroup: FormGroup;
   submitted = false;
   departments = [];
@@ -26,14 +34,21 @@ export class AddEmployeeComponent implements OnInit {
   countries = [];
   states = [];
   cities = [];
+  profilePictures = [];
   rolesArray = [];
   retResult = {};
   bsConfig: Partial<BsDatepickerConfig> = Object.assign({}, { dateInputFormat: 'DD-MMM-YYYY', containerClass: 'theme-dark-blue' });
 
+  options = {
+    autoClose: false,
+    keepAfterRouteChange: true
+  };
 
 
-
-  constructor(private route: ActivatedRoute, private fb: FormBuilder, private dropdownService: DropdownsService, private employeesService: EmployeesService) {
+  constructor(private activatedRoute: ActivatedRoute, private route: Router,
+    private fb: FormBuilder, private dropdownService: DropdownsService,
+    private employeesService: EmployeesService, private alertService: AlertService,
+    private loadingScreenService: LoadingScreenService) {
 
 
     this.EmployeeFormGroup = this.fb.group({
@@ -60,6 +75,8 @@ export class AddEmployeeComponent implements OnInit {
       NationalityId: ['0'],
       AddressTypeId: [3],
       DepartmentId: ['0'],
+      ProfilePictureUrl: [],
+      ProfilePictures: this.fb.array([]),
       // Mobiles:this.Mobiles,
       Mobiles: this.fb.array([
         this.fb.group({
@@ -130,20 +147,20 @@ export class AddEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    let param = this.route.snapshot.paramMap.get("Id")
+    this.loadingScreenService.start("Please wait...!")
+    let param = this.activatedRoute.snapshot.paramMap.get("Id")
     if (param != undefined && param != null && param != "") {
-      this.route.paramMap.subscribe(parammap => {
-        this.employeesService.EditEmployee(+param).subscribe(result => {
-          console.log(result);
-          this.EmployeeFormGroup.patchValue(result),
-            error => {
-              console.log(error);
-            }
-        })
+      this.activatedRoute.paramMap.subscribe(paramMap => {
+        this.EditEmployee(+paramMap.get("Id"))
       })
-    }
-    this.log(param);
 
+    }
+
+    // this.log(param);
+
+  }
+  ngAfterViewInit() {
+    this.loadingScreenService.stop();
   }
   ngAfterViewChecked() {
 
@@ -155,9 +172,7 @@ export class AddEmployeeComponent implements OnInit {
   }
 
 
-  editEmployee(employee:) {
 
-  }
   // properties
 
   public get mobiles(): FormArray {
@@ -187,6 +202,19 @@ export class AddEmployeeComponent implements OnInit {
   }
   public get roles(): FormArray {
     return this.EmployeeFormGroup.get("Roles") as FormArray;
+  }
+  public AddProfilePictures(path) {
+    let control = <FormArray>this.EmployeeFormGroup.controls.ProfilePictures;
+    control.push(
+      this.fb.group({
+        Path: [path]
+      })
+    )
+
+  }
+  public RemoveProfilePicture() {
+    let control = <FormArray>this.EmployeeFormGroup.controls.ProfilePictures;
+    control.clear();
   }
 
 
@@ -230,6 +258,38 @@ export class AddEmployeeComponent implements OnInit {
   }
 
 
+  EditEmployee(param: number): void {
+
+    this.employeesService.EditEmployee(+param).subscribe(result => {
+      // console.log(result);
+
+      this.stateChange(+result.Addresses[0].StateMasterId);
+      this.previewUrl = result.ProfilePictureUrl || this.previewUrl;
+      this.countryChange(+result.Addresses[0].CountryMasterId);
+
+      this.EmployeeFormGroup.patchValue(result),
+        error => {
+          console.log(error);
+        }
+    });
+  }
+
+  updateEmployee(employee: any) {
+    this.loadingScreenService.start("Updating please wait...")
+    this.employeesService.updateEmployee(employee).subscribe(retResult => {
+      if (retResult.Succeeded) {
+        this.alertService.success('employee updated successfully...!', this.options)
+        this.loadingScreenService.stop();
+        this.route.navigate(['/employees']);
+
+      }
+      else {
+        this.loadingScreenService.stop();
+        this.alertService.error('something went wrong...!', this.options)
+      }
+    })
+  }
+
   countryChange(countryId: number) {
     // alert(countryId);
     this.dropdownService.states(countryId).subscribe(states => {
@@ -246,10 +306,57 @@ export class AddEmployeeComponent implements OnInit {
 
   saveEmployee(employeeData: any) {
     this.employeesService.saveEmployee(employeeData).subscribe((retResult => {
-      this.retResult;
-      console.log(retResult)
+
+      if (retResult.Succeeded) {
+        this.alertService.success('employee saved successfully...!', this.options)
+        this.route.navigate(['/employees']);
+
+      }
+      else {
+        this.alertService.error('something went wrong...!', this.options)
+      }
+
+
 
     }))
+  }
+
+  fileChange(event) {
+    let inputelement = this.fileInput.nativeElement as HTMLElement
+    inputelement.click();
+  }
+  uploadFile(fileInput) {
+
+    this.fileData = this.fileInput.nativeElement.files[0];
+    let formData = new FormData();
+    formData.append('file', this.fileData)
+    this.employeesService.uploadProfileImage(formData).subscribe(result => {
+      this.RemoveProfilePicture();
+      this.previewUrl = "";
+      this.AddProfilePictures(result);
+      this.preview();
+    })
+
+
+  }
+
+
+  preview() {
+    // Show preview 
+    var mimeType = this.fileData.type;
+    if (mimeType.match(/image\/*/) == null) {
+      return;
+    }
+    var reader = new FileReader();
+    reader.readAsDataURL(this.fileData);
+    reader.onload = (_event) => {
+      // this.EmployeeFormGroup.controls.ProfilePictureUrl.setValue(reader.result)
+      this.previewUrl = reader.result;
+    }
+  }
+  removeProfile() {
+    this.previewUrl = "../assets/images/placeholder-profile-male.jpg";
+    this.RemoveProfilePicture();
   }
 
 }

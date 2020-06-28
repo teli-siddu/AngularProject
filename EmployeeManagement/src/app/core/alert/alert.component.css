@@ -1,0 +1,6 @@
+.alert{
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 0px auto;
+    width: fit-content;
+}

@@ -1,0 +1,52 @@
+
+ ul{
+    list-style: none;
+  
+}
+/* .ul-wrapper{
+    display: flex;
+} */
+/* ul li{
+    display: flex
+} */
+
+
+.btn-chevron-down{
+    /* padding: 0px; */
+    background: none;
+   
+}
+li a{
+    color:chartreuse;
+}
+li {
+    color:chartreuse;
+    padding: 0px;
+}
+/* .nested-ul-wrapper{
+    position: absolute;
+    right: 8rem;
+    top: 3rem;
+} */
+
+/* li>div {
+    position: absolute;
+    top: 3rem;
+    background: black;
+} */
+.ng-template-wrapper{
+    position: absolute;
+    top: 2.7rem;
+    background: black;
+    width: max-content;
+}
+.mat-icon{
+    vertical-align: inherit;
+}
+.dropdown-menu-right{
+    right:0;
+    left: auto;
+}
+.user-profile-dropdown{
+border: none;
+}

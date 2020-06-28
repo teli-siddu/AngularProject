@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="navigation-otions" style="margin-bottom:30px">
-            <a class="btn" [routerLink]="['/addemployee']">
+            <a class="btn" [routerLink]="['/employees/addemployee']">
                 <i class="fa fa-plus-circle"></i>
                 <span class="nav-text">
                     Add Employee
@@ -17,6 +17,6 @@
 
     <div class="col-md-4" *ngFor="let x of employees">
 
-        <app-card [employee]="x"></app-card>
+        <app-card [employee]="x" (delete)="deleteEmployee($event)"></app-card>
     </div>
 </div>

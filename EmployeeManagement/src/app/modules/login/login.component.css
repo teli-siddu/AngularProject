@@ -1,0 +1,17 @@
+.card-header::after{
+    content: "";
+    background: transparent;
+   
+}
+.card-header{
+    text-align: center;
+    background: darkblue;
+    color:white;
+}
+.card-footer{
+    text-align: center;
+}
+.login-btn{
+    background: darkblue;
+    color: white;
+}

@@ -1,0 +1,76 @@
+<!-- <mat-card>
+    <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <h2>Log In</h2>
+            <mat-error *ngIf="loginInvalid">
+                The username and password were not recognised
+            </mat-error>
+            <mat-form-field class="full-width-input">
+                <input matInput placeholder="Email" formControlName="username" required>
+                <mat-error>
+                    Please provide a valid email address
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width-input">
+                <input matInput type="password" placeholder="Password" formControlName="password" required>
+                <mat-error>
+                    Please provide a valid password
+                </mat-error>
+            </mat-form-field>
+            <button mat-raised-button color="primary">Login</button>
+        </form>
+    </mat-card-content>
+</mat-card> -->
+
+<div class="card-container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="card col-md-4" style="margin: 2em auto;">
+            <div class="card-header">
+                <h3>Login</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Email</label>
+                            <input class="form-control" placeholder="Email" formControlName="UserName" required>
+                            <div class="text text-danger"
+                                *ngIf="userName.invalid &&( userName.touched || userName.dirty)">
+                                <div *ngIf="userName.errors.required">
+                                    User Name is required
+                                </div>
+                                <div *ngIf="userName.errors.email">
+                                    Invalid email id
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Password</label>
+                            <input class="form-control" placeholder="Password" formControlName="Password" required>
+                            <div class="text text-danger"
+                                *ngIf="password.invalid &&( password.touched || password.dirty)">
+                                <div *ngIf="password.errors.required">
+                                    User Name is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="submit" [disabled]="form.invalid" class="btn login-btn w-100">Login</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+</div>

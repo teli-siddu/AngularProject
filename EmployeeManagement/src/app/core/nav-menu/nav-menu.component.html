@@ -1,0 +1,220 @@
+<div class="d-flex ">
+
+    <ng-container *ngIf="isAuthenticated$ | async">
+        <div *ngFor="let item of menuItems | async">
+            <!-- Handle branch node buttons here -->
+            <div *ngIf="item.Children && item.Children.length > 0">
+                <div class="btn btn-chevron-down" color="primary" [matMenuTriggerFor]="menu.childMenu">
+                    <span> {{item.Name}}</span>
+                    <mat-icon>expand_more</mat-icon>
+                </div>
+                <app-menu-items #menu [menuItems]="item.Children"></app-menu-items>
+            </div>
+            <!-- Leaf node buttons here -->
+            <div *ngIf="!item.Children || item.Children.length === 0">
+                <div mat-button color="primary">
+                    <a [routerLink]="item.URL">{{item.Name}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="align-items-center  d-flex btn">
+                <div class="media-left">
+                    <!-- <img src="{{(User | async )?.ProfilePictureUrl}}" width="32" height="32"
+                        class="rounded-circle mr-2"> -->
+                    <img src="{{(user | async )?.ProfilePictureUrl}}" width="32" height="32"
+                        class="rounded-circle mr-2">
+                </div>
+                <div class="media-body mr-2">
+                    <b>{{(user | async )?.Roles[0].RoleName}}</b>
+                </div>
+                <div class="media-right">
+                    <i class="material-icons md-18 md-inactive md-dark">expand_more</i>
+                </div>
+            </div>
+            <div class="dropdown-menu dropdown-menu-right user-profile-dropdown" aria-labelledby="dropdownMenuButton">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="user-profile-picture p-1">
+                            <img src="{{(user | async )?.ProfilePictureUrl}}" width="100" height="100"
+                                class="rounded-circle">
+                        </div>
+                        <div class="user-name p-1">
+                            <b>{{(user | async )?.UserName}}</b>
+
+
+
+                        </div>
+                        <div class="text-center p-1">
+                            <a class="d-flex" [routerLink]="['/logout']">
+
+                                <span>Logout</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </ng-container>
+
+
+
+
+
+</div>
+<!-- 
+<ng-template #topNavMenuItems let-menuItems>
+
+</ng-template> -->
+<!-- <div class="d-flex">
+    <div *ngIf="isAuthenticated$ | async"><a [routerLink]="['/logout']" class="nav-link dropdown-submenu">log out</a>
+    </div>
+    <div *ngFor="let item of menuItems | async; let i = index" id="i" class="d-flex  dropdown">
+
+        <div class="d-flex">
+            <button (click)="toggleLi(i)" class="btn btn-chevron-down" *ngIf="item.Children.length>0"><i class="fa"
+                    [ngClass]="{'fa-chevron-down':toggle[i],'fa-chevron-right':!toggle[i]}"
+                    aria-hidden="true"></i></button>
+            <a class="nav-link" [routerLink]="[item.URL]">
+                <span>{{item.Name}}</span>
+            </a>
+        </div>
+        <div class="ng-template-wrapper">
+            <div *ngIf="item.Children.length>0 && toggle[i]">
+                <ng-container *ngTemplateOutlet="tree; context: { $implicit: item.Children, idx: i }">
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ng-template-wrapper">
+    <ng-template #tree let-allItems let-idx="idx">
+
+
+        <ul class="p-0">
+            <li *ngFor="let item of allItems; let n = index" id="{{idx+'.'+n}}" class="d-flex flex-column">
+
+                <div class="d-flex">
+                    <button (click)="toggleLi(idx+'.'+n)" class="btn btn-chevron-down "
+                        *ngIf="item.Children.length>0"><i class="fa fa-chevron-down"
+                            [ngClass]="{'fa-chevron-down':toggle[idx+'.'+n],'fa-chevron-right':!toggle[idx+'.'+n]}"
+                            aria-hidden="true"></i></button>
+                    <a class="nav-link" [routerLink]="[item.URL]">
+                        <span>{{item.Name}}</span>
+                    </a>
+                </div>
+
+
+
+                <div *ngIf="item.Children.length>0 && toggle[idx+'.'+n]">
+                    <ng-container *ngTemplateOutlet="tree; context: { $implicit: item.Children, idx: n }">
+                    </ng-container>
+                </div>
+            </li>
+        </ul>
+    </ng-template>
+</div> -->
+
+<!-- <div class="d-flex">
+    <div *ngIf="isAuthenticated$ | async"><a [routerLink]="['/logout']" class="nav-link dropdown-submenu">log out</a>
+
+    </div>
+
+    <div *ngFor="let item of menuItems | async; let i = index" id="i" class="d-flex  dropdown">
+
+        <div class="d-flex">
+            <button (click)="toggleLi(i)" class="btn btn-chevron-down" *ngIf="item.Children.length>0"><i class="fa"
+                    [ngClass]="{'fa-chevron-down':toggle[i],'fa-chevron-right':!toggle[i]}"
+                    aria-hidden="true"></i></button>
+            <a class="nav-link" [routerLink]="[item.URL]">
+                <span>{{item.Name}}</span>
+            </a>
+        </div>
+        <div class="ng-template-wrapper">
+            <div *ngIf="item.Children.length>0 && toggle[i]">
+                <ng-container *ngTemplateOutlet="tree; context: { $implicit: item.Children, idx: i }">
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ng-template-wrapper">
+    <ng-template #tree let-allItems let-idx="idx">
+        <button mat-button [matMenuTriggerFor]="animals">Log Out</button>
+
+
+        <button *ngFor="let item of allItems; let n = index" mat-button [matMenuTriggerFor]="item.Id">
+
+        </button>
+        <ul class="p-0">
+            <li *ngFor="let item of allItems; let n = index" id="{{idx+'.'+n}}" class="d-flex flex-column">
+
+                <div class="d-flex">
+                    <button (click)="toggleLi(idx+'.'+n)" class="btn btn-chevron-down "
+                        *ngIf="item.Children.length>0"><i class="fa fa-chevron-down"
+                            [ngClass]="{'fa-chevron-down':toggle[idx+'.'+n],'fa-chevron-right':!toggle[idx+'.'+n]}"
+                            aria-hidden="true"></i></button>
+                    <a class="nav-link" [routerLink]="[item.URL]">
+                        <span>{{item.Name}}</span>
+                    </a>
+                </div>
+
+
+
+                <div *ngIf="item.Children.length>0 && toggle[idx+'.'+n]">
+                    <ng-container *ngTemplateOutlet="tree; context: { $implicit: item.Children, idx: n }">
+                    </ng-container>
+                </div>
+            </li>
+        </ul>
+    </ng-template>
+</div> -->
+
+<!-- 
+<div class="d-flex">
+
+    <button mat-button [matMenuTriggerFor]="animals">tes</button>
+    <ng-container [ngTemplateOutlet]="recursiveListMenuItems" [ngTemplateOutletContext]="{$implicit: menuItems1}">
+    </ng-container>
+</div>
+
+
+
+
+<ng-template #recursiveListMenuItems let-menuItems>
+
+    <div *ngFor="let menuItem of menuItems">
+        <ng-container [ngTemplateOutlet]="menuItem.Children.length>0? submenuItem : simpleMenuItem"
+            [ngTemplateOutletContext]="{$implicit: menuItem}"></ng-container>
+    </div>
+
+
+
+
+</ng-template>
+
+<ng-template #simpleMenuItem let-menuItem>
+    <button mat-menu-item class="mat-button"><span>{{menuItem.Name}}</span></button>
+</ng-template>
+
+<ng-template #submenuItem let-menuItem>
+
+    <button mat-menu-item [matMenuTriggerFor]="matsubmenuitem" class="mat-button"><span>{{menuItem.Name}}</span>
+        <mat-menu #matsubmenuitem="matMenu">
+            <ng-container [ngTemplateOutlet]="recursiveListMenuItems"
+                [ngTemplateOutletContext]="{$implicit: menuItem.Children}">
+            </ng-container>
+        </mat-menu>
+    </button>
+
+
+</ng-template> -->
