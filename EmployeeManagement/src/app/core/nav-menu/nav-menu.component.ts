@@ -14,8 +14,8 @@ import { EmployeesService } from 'src/app/modules/employees/Services/employees.s
 })
 export class NavMenuComponent implements OnInit {
 
-  @Input() user: EmployeeViewModel;
-  @Input() menuItems: MenuItem[]
+  @Input() user: Observable<EmployeeViewModel>;
+  @Input() menuItems: Observable<MenuItem[]>
   isAuthenticated$: Observable<boolean>;
   // User: Observable<EmployeeViewModel>;
   // menuItems: Observable<MenuItem[]>;
